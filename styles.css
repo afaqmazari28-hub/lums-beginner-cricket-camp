@@ -153,4 +153,32 @@
     font-size: 2rem;
   }
 }
+/* ADMIN-CONTROLLED ABOUT SECTION COLOURS */
 
+#about {
+  background: var(--about-bg, #f0f5f2);
+}
+
+#about .section-heading h2,
+#about .about-copy h3 {
+  color: var(--about-heading, #0b1f3a);
+}
+
+#about .section-heading p,
+#about .about-copy p {
+  color: var(--about-text, #526477);
+}
+
+#about .info-panel {
+  background: var(--about-card, #ffffff);
+  border-color: var(--about-accent, #168447);
+  border-top-color: var(--about-accent, #168447);
+}
+
+#about .info-panel h3 {
+  color: var(--about-card-heading, #0b1f3a);
+}
+
+#about .info-panel b {
+  color: var(--about-accent, #168447);
+}
