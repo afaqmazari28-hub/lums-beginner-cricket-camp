@@ -14,7 +14,13 @@ const defaultSettings = {
   hero_description:"Never played before? Perfect. Learn the game, build confidence and have fun together on the pitch.",
   about_text:"A welcoming space for LUMS students to learn cricket, develop skills and enjoy the game together.",
   about_extra:"Our focus is on the basics: batting, bowling, fielding and teamwork. Beginners are welcome, and everyone gets a chance to learn and play.",
-  background_url:"", logo_url:"", overlay_color:"#072a63"
+  background_url:"", logo_url:"", overlay_color:"#072a63",
+about_bg_color:"#f0f5f2",
+about_heading_color:"#0b1f3a",
+about_text_color:"#526477",
+about_card_color:"#ffffff",
+about_card_heading_color:"#0b1f3a",
+about_accent_color:"#168447"
 };
 const defaultPractice = {days:"Monday, Wednesday, Friday",time:"5:00 PM – 6:30 PM",venue:"LUMS Cricket Ground",bring:"Sports shoes, water, positive attitude",equipment:"Equipment provided for beginners",frequency:3};
 
@@ -52,6 +58,12 @@ function renderSite(){
   if(s.background_url)document.documentElement.style.setProperty("--hero-image",`url("${s.background_url}")`);
   else document.documentElement.style.setProperty("--hero-image","none");
   document.documentElement.style.setProperty("--hero-overlay",s.overlay_color||"#072a63");
+  document.documentElement.style.setProperty("--about-bg",s.about_bg_color||"#f0f5f2");
+document.documentElement.style.setProperty("--about-heading",s.about_heading_color||"#0b1f3a");
+document.documentElement.style.setProperty("--about-text",s.about_text_color||"#526477");
+document.documentElement.style.setProperty("--about-card",s.about_card_color||"#ffffff");
+document.documentElement.style.setProperty("--about-card-heading",s.about_card_heading_color||"#0b1f3a");
+document.documentElement.style.setProperty("--about-accent",s.about_accent_color||"#168447");
   if(s.logo_url){$("brandLogo").src=s.logo_url;$("heroLogo").src=s.logo_url}
   document.title=s.hero_title||"LUMS Beginner Cricket Camp";
 }
@@ -138,6 +150,12 @@ function populateAdminForms(){
   const s=state.settings,p=state.practice;
   $("settingHeroTitle").value=s.hero_title;$("settingHeroSubtitle").value=s.hero_subtitle;$("settingHeroDescription").value=s.hero_description;
   $("settingAboutText").value=s.about_text;$("settingAboutExtra").value=s.about_extra;$("overlayColor").value=s.overlay_color||"#072a63";
+  $("aboutBgColor").value=s.about_bg_color||"#f0f5f2";
+$("aboutHeadingColor").value=s.about_heading_color||"#0b1f3a";
+$("aboutTextColor").value=s.about_text_color||"#526477";
+$("aboutCardColor").value=s.about_card_color||"#ffffff";
+$("aboutCardHeadingColor").value=s.about_card_heading_color||"#0b1f3a";
+$("aboutAccentColor").value=s.about_accent_color||"#168447";
   $("practiceDays").value=p.days;$("practiceTime").value=p.time;$("practiceVenue").value=p.venue;$("practiceBring").value=p.bring;
   $("practiceEquipment").value=p.equipment;$("practiceFrequency").value=p.frequency;
 }
@@ -154,7 +172,15 @@ $("siteForm").addEventListener("submit",async e=>{
   e.preventDefault();const btn=e.submitter;setBusy(btn,true,"Saving…");
   try{
     const s={...state.settings,hero_title:$("settingHeroTitle").value.trim(),hero_subtitle:$("settingHeroSubtitle").value.trim(),
-      hero_description:$("settingHeroDescription").value.trim(),about_text:$("settingAboutText").value.trim(),about_extra:$("settingAboutExtra").value.trim(),overlay_color:$("overlayColor").value};
+      hero_description:$("settingHeroDescription").value.trim(),about_text:$("settingAboutText").value.trim(),
+about_extra:$("settingAboutExtra").value.trim(),
+overlay_color:$("overlayColor").value,
+about_bg_color:$("aboutBgColor").value,
+about_heading_color:$("aboutHeadingColor").value,
+about_text_color:$("aboutTextColor").value,
+about_card_color:$("aboutCardColor").value,
+about_card_heading_color:$("aboutCardHeadingColor").value,
+about_accent_color:$("aboutAccentColor").value};
     const bg=$("backgroundUpload").files[0],logo=$("logoUpload").files[0];
     if(bg)s.background_url=await uploadImage(bg,"site-assets","backgrounds");
     if(logo)s.logo_url=await uploadImage(logo,"site-assets","logos");
