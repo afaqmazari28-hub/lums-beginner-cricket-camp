@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#072a63">
+  <title>LUMS Beginner Cricket Camp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+<header class="site-header">
+  <nav class="container nav">
+    <a class="brand" href="#home"><img id="brandLogo" src="lums-logo.png" alt="LUMS logo"><span>LUMS <b>Beginner Camp</b></span></a>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a href="#about">About</a><a href="#fixtures">Fixtures</a><a href="#squad">Squad</a><a href="#join">Join us</a>
+      <button class="nav-admin" id="openAdmin">Admin</button>
+    </div>
+  </nav>
+</header>
+
+<main>
+<section class="hero" id="home">
+  <div class="hero-overlay"></div>
+  <div class="container hero-content">
+    <img id="heroLogo" class="hero-logo" src="lums-logo.png" alt="LUMS logo">
+    <span class="eyebrow">NEW PLAYERS WELCOME</span>
+    <h1 id="heroTitle">LUMS <em>Beginner</em> Camp</h1>
+    <p class="hero-kicker" id="heroSubtitle">CRICKET TEAM</p>
+    <p id="heroDescription" class="hero-description">Never played before? Perfect. Learn the game, build confidence and have fun together on the pitch.</p>
+    <div class="hero-actions"><a class="button button-gold" href="#join">Join the squad</a><a class="button button-outline" href="#fixtures">See fixtures</a></div>
+    <div class="stats">
+      <div><strong id="memberCount">0</strong><span>Squad members</span></div>
+      <div><strong id="matchCount">0</strong><span>Fixtures listed</span></div>
+      <div><strong id="practiceCount">3</strong><span>Practices / week</span></div>
+      <div><strong>100%</strong><span>Beginner friendly</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="section">
+  <div class="container">
+    <div class="section-heading"><span>THE CAMP</span><h2>About the camp</h2><p id="aboutText">A welcoming space for LUMS students to learn cricket, develop skills and enjoy the game together.</p></div>
+    <div class="two-col">
+      <div class="about-copy"><h3>Everyone starts somewhere.</h3><p id="aboutExtra">Our focus is on the basics: batting, bowling, fielding and teamwork. Beginners are welcome, and everyone gets a chance to learn and play.</p></div>
+      <div class="info-panel"><h3>Practice details</h3><ul id="practiceDetails"></ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="fixtures" class="section section-white">
+  <div class="container">
+    <div class="section-heading"><span>ON THE FIELD</span><h2>Fixtures &amp; results</h2><p>Follow upcoming matches and completed games.</p></div>
+    <div id="fixtureList" class="fixture-list"><p class="muted">Loading fixtures…</p></div>
+  </div>
+</section>
+
+<section id="squad" class="section">
+  <div class="container">
+    <div class="section-heading"><span>THE PLAYERS</span><h2>Meet the squad</h2><p>Meet the students learning and playing together.</p></div>
+    <div id="squadGrid" class="squad-grid"><p class="muted">Loading squad…</p></div>
+  </div>
+</section>
+
+<section id="join" class="join-section">
+  <div class="container">
+    <div class="section-heading light"><span>BE PART OF IT</span><h2>Join the squad</h2><p>Complete the form. Your contact details and LUMS ID are kept private.</p></div>
+    <form id="joinForm" class="join-card">
+      <div class="form-grid">
+        <label>Full name<input id="fullName" name="fullName" maxlength="70" required autocomplete="name"></label>
+        <label>LUMS ID<input id="lumsId" name="lumsId" maxlength="20" required autocomplete="off"></label>
+      </div>
+      <label>Student email<input id="email" name="email" type="email" required autocomplete="email"></label>
+      <label>Playing role
+        <select id="role" name="role" required><option value="Batsman">Batsman</option><option value="Bowler">Bowler</option><option value="All-rounder">All-rounder</option><option value="Wicketkeeper">Wicketkeeper</option><option value="Beginner / not sure">Beginner / not sure</option></select>
+      </label>
+      <label>Profile picture <input id="memberPhoto" type="file" accept="image/png,image/jpeg,image/webp"></label>
+      <p class="small-note">Use a JPG, PNG or WebP image (maximum 5 MB). Please only upload a picture you have permission to share.</p>
+      <button class="button button-gold" type="submit">Submit registration</button>
+      <p id="joinMessage" class="form-message" role="status"></p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer><div class="container footer-inner"><p>© <span id="year"></span> LUMS Beginner Camp</p><a href="mailto:officialstudent230@gmail.com">officialstudent230@gmail.com</a></div></footer>
+
+<dialog id="adminDialog" class="admin-dialog">
+  <div class="admin-shell">
+    <div class="admin-top"><div><span class="eyebrow">CONTROL PANEL</span><h2>Camp administration</h2></div><button id="closeAdmin" class="icon-button" aria-label="Close">✕</button></div>
+    <div id="adminLoginPanel">
+      <p class="muted">Sign in using the administrator account created in Supabase Authentication.</p>
+      <form id="adminLoginForm" class="admin-form">
+        <label>Email<input id="adminEmail" type="email" required autocomplete="username"></label>
+        <label>Password<input id="adminPassword" type="password" required autocomplete="current-password"></label>
+        <button class="button button-blue" type="submit">Sign in</button><p id="loginMessage" class="form-message"></p>
+      </form>
+    </div>
+    <div id="adminPanel" hidden>
+      <div class="admin-toolbar"><span id="adminIdentity"></span><button id="logoutBtn" class="button button-small button-outline-dark">Sign out</button></div>
+      <div class="admin-tabs">
+        <button class="tab active" data-tab="siteTab">Website</button><button class="tab" data-tab="practiceTab">Practice</button><button class="tab" data-tab="fixturesTab">Fixtures</button><button class="tab" data-tab="squadTab">Squad</button>
+      </div>
+      <section id="siteTab" class="tab-panel">
+        <h3>Homepage and appearance</h3>
+        <form id="siteForm" class="admin-form">
+          <label>Hero heading<input id="settingHeroTitle" required></label>
+          <label>Hero subtitle<input id="settingHeroSubtitle"></label>
+          <label>Hero description<textarea id="settingHeroDescription" rows="3"></textarea></label>
+          <label>About text<textarea id="settingAboutText" rows="3"></textarea></label>
+          <label>Additional about text<textarea id="settingAboutExtra" rows="3"></textarea></label>
+          <label>Hero background image<input id="backgroundUpload" type="file" accept="image/*"></label>
+          <label>Camp / LUMS logo<input id="logoUpload" type="file" accept="image/*"></label>
+          <label>Hero overlay colour<input id="overlayColor" type="color" value="#072a63"></label>
+          <button class="button button-blue" type="submit">Save website changes</button><p id="siteMessage" class="form-message"></p>
+        </form>
+      </section>
+      <section id="practiceTab" class="tab-panel" hidden>
+        <h3>Practice information</h3>
+        <form id="practiceForm" class="admin-form">
+          <label>Practice days<input id="practiceDays" placeholder="Monday, Wednesday, Friday"></label>
+          <label>Practice time<input id="practiceTime" placeholder="5:00 PM – 6:30 PM"></label>
+          <label>Venue<input id="practiceVenue" placeholder="LUMS Cricket Ground"></label>
+          <label>What to bring<input id="practiceBring" placeholder="Sports shoes, water"></label>
+          <label>Equipment<input id="practiceEquipment" placeholder="Equipment details"></label>
+          <label>Practices per week<input id="practiceFrequency" type="number" min="0" max="14"></label>
+          <button class="button button-blue" type="submit">Save practice details</button><p id="practiceMessage" class="form-message"></p>
+        </form>
+      </section>
+      <section id="fixturesTab" class="tab-panel" hidden>
+        <h3>Add or edit fixtures and results</h3>
+        <form id="fixtureForm" class="admin-form">
+          <input id="fixtureId" type="hidden">
+          <label>Opponent / match title<input id="fixtureTitle" required maxlength="120"></label>
+          <div class="form-grid"><label>Date<input id="fixtureDate" type="date" required></label><label>Time<input id="fixtureTime" placeholder="4:00 PM"></label></div>
+          <label>Venue<input id="fixtureVenue"></label>
+          <label>Result / notes<input id="fixtureResult" placeholder="e.g. Won by 12 runs or Match postponed"></label>
+          <label>Status<select id="fixtureStatus"><option value="Upcoming">Upcoming</option><option value="Completed">Completed</option><option value="Postponed">Postponed</option><option value="Cancelled">Cancelled</option></select></label>
+          <div class="inline-actions"><button class="button button-blue" type="submit">Save fixture</button><button class="button button-outline-dark" type="button" id="clearFixture">Clear</button></div><p id="fixtureMessage" class="form-message"></p>
+        </form>
+        <div id="adminFixtureList" class="admin-list"></div>
+      </section>
+      <section id="squadTab" class="tab-panel" hidden>
+        <h3>Manage squad members</h3>
+        <p class="muted small-note">Edit public player details or remove a member. Private LUMS ID and email are visible only to authorised admins.</p>
+        <div id="adminSquadList" class="admin-list"></div>
+        <div class="admin-export"><button id="exportCsv" class="button button-outline-dark" type="button">Export private squad data (CSV)</button></div>
+      </section>
+      <p id="adminGlobalMessage" class="form-message"></p>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="memberEditDialog" class="admin-dialog small-dialog">
+  <div class="admin-shell">
+    <div class="admin-top"><h2>Edit squad member</h2><button id="closeMemberEdit" class="icon-button">✕</button></div>
+    <form id="memberEditForm" class="admin-form">
+      <input id="editMemberId" type="hidden">
+      <label>Name<input id="editMemberName" required maxlength="70"></label>
+      <label>Role<select id="editMemberRole"><option>Batsman</option><option>Bowler</option><option>All-rounder</option><option>Wicketkeeper</option><option>Beginner / not sure</option></select></label>
+      <label>Replace profile picture<input id="editMemberPhoto" type="file" accept="image/*"></label>
+      <button class="button button-blue" type="submit">Save member</button><p id="memberEditMessage" class="form-message"></p>
+    </form>
+  </div>
+</dialog>
+</body>
+</html>
