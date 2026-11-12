@@ -92,7 +92,11 @@ async function uploadImage(file,bucket,folder){
   const ext=(file.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";
   const path=`${folder}/${crypto.randomUUID()}.${ext}`;
   const {error}=await db.storage.from(bucket).upload(path,file,{cacheControl:"3600",upsert:false,contentType:file.type});
-  if(error)throw error;
+  if (error) {
+  const details = await error.context?.json().catch(() => null);
+  console.error("Edge Function details:", details);
+  throw new Error(details?.error || error.message);
+}
   return db.storage.from(bucket).getPublicUrl(path).data.publicUrl;
 }
 
