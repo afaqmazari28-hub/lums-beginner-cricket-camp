@@ -182,3 +182,79 @@
 #about .info-panel b {
   color: var(--about-accent, #168447);
 }
+
+/* LIVE TOURNAMENT COUNTDOWN */
+.countdown-section {
+  margin: 45px auto 10px;
+  padding: 28px 20px;
+  max-width: 760px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 18px;
+  backdrop-filter: blur(10px);
+}
+
+.countdown-label {
+  color: #45c477;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  margin-bottom: 8px;
+}
+
+.countdown-section h2 {
+  color: #ffffff;
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(22px, 4vw, 32px);
+  margin-bottom: 22px;
+}
+
+.countdown-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.countdown-grid > div {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 18px 8px;
+}
+
+.countdown-grid strong {
+  display: block;
+  color: #45c477;
+  font-size: clamp(25px, 5vw, 38px);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown-grid span {
+  display: block;
+  color: #ffffff;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 5px
+}
+
+.countdown-message {
+  color: #ffffff; 
+  font-size: 13px;
+  margin-top: 18px;
+}
+
+@media (max-width: 480px) {
+  .countdown-section {
+    padding: 22px 12px;
+  }
+
+  .countdown-grid {
+    gap: 7px;
+  }
+
+  .countdown-grid > div {
+    padding: 14px 4px;
+  }
+}
