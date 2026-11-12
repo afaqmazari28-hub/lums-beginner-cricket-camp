@@ -97,6 +97,7 @@ async function uploadImage(file,bucket,folder){
 }
 
 
+
 $("joinForm").addEventListener("submit", async e => {
   e.preventDefault();
   if (!requireDb()) return;
@@ -118,7 +119,6 @@ $("joinForm").addEventListener("submit", async e => {
       throw new Error("Please enter a valid email.");
     }
 
-    // Get the Cloudflare CAPTCHA token
     const token = document.querySelector(
       '[name="cf-turnstile-response"]'
     )?.value;
@@ -127,46 +127,48 @@ $("joinForm").addEventListener("submit", async e => {
       throw new Error("Please complete the CAPTCHA first.");
     }
 
-    // Verify CAPTCHA through Supabase Edge Function
-    const { data, error: captchaError } = await db.functions.invoke(
-      "verify-turnstile",
-      { body: { token } }
-    );
-
-    if (captchaError) throw captchaError;
-
-    if (!data?.success) {
-      throw new Error("CAPTCHA verification failed. Please try again.");
-    }
-
-    // Upload profile picture after CAPTCHA verification
+    // Upload profile picture
     const photo_url = file
       ? await uploadImage(file, "member-photos", "members")
       : "";
 
-    // Register the member
-    const { error: registrationError } = await db.rpc(
-      "register_camp_member",
+    // Verify CAPTCHA and register through the Edge Function
+    const { data, error } = await db.functions.invoke(
+      "verify-turnstile",
       {
-        p_name: name,
-        p_role: role,
-        p_photo_url: photo_url,
-        p_lums_id: lums_id,
-        p_email: email
+        body: {
+          token,
+          name,
+          role,
+          photo_url,
+          lums_id,
+          email
+        }
       }
     );
 
-    if (registrationError) throw registrationError;
+    if (error) throw error;
+
+    if (!data?.success) {
+      throw new Error(
+        data?.error || "Registration could not be completed."
+      );
+    }
 
     e.target.reset();
     window.turnstile?.reset();
-    message("joinMessage", "Thank you! Your registration has been received.");
+
+    message(
+      "joinMessage",
+      "Thank you! Your registration has been received."
+    );
 
     await loadPublicData();
 
   } catch (err) {
     console.error("Registration error:", err);
     window.turnstile?.reset();
+
     message(
       "joinMessage",
       err.message || "Registration could not be submitted.",
@@ -176,6 +178,7 @@ $("joinForm").addEventListener("submit", async e => {
     setBusy(button, false);
   }
 });
+
 
 
 $("menuBtn").onclick=()=>$("navLinks").classList.toggle("open");
