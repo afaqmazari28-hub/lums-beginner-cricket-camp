@@ -43,7 +43,10 @@ async function loadPublicData(){
   state.members=members.data||[];state.fixtures=fixtures.data||[];
   state.settings={...defaultSettings,...(settings.data?.value||{})};
   state.practice={...defaultPractice,...(practice.data?.value||{})};
-  renderSite();renderFixtures();renderSquad();
+  renderSite();
+renderFixtures();
+renderSquad();
+startTournamentCountdown();
 }
 function renderSite(){
   const s=state.settings,p=state.practice;
@@ -220,5 +223,56 @@ $("exportCsv").onclick=async()=>{
   const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));const a=document.createElement("a");a.href=url;a.download="lums-beginner-camp-squad.csv";a.click();URL.revokeObjectURL(url);
 };
 
+// LIVE TOURNAMENT COUNTDOWN
+let countdownInterval = null;
+
+function updateTournamentCountdown() {
+  const upcoming = state.fixtures
+    .filter(f => f.status !== "Completed" &&
+                 f.status !== "Cancelled" &&
+                 f.status !== "Postponed")
+    .map(f => ({
+      ...f,
+      eventDate: new Date(`${f.match_date}T${f.match_time || "00:00"}:00+05:00`)
+    }))
+    .filter(f => !isNaN(f.eventDate.getTime()) &&
+                 f.eventDate.getTime() > Date.now())
+    .sort((a, b) => a.eventDate - b.eventDate);
+
+  const title = $("countdownTitle");
+  const message = $("countdownMessage");
+
+  if (!upcoming.length) {
+    title.textContent = "No upcoming tournament";
+    message.textContent = "Check back soon for our next event.";
+    $("tournamentCountdown").style.display = "none";
+    return;
+  }
+
+  $("tournamentCountdown").style.display = "grid";
+
+  const event = upcoming[0];
+  title.textContent = event.title;
+
+  const remaining = event.eventDate.getTime() - Date.now();
+
+  const days = Math.floor(remaining / 86400000);
+  const hours = Math.floor((remaining % 86400000) / 3600000);
+  const minutes = Math.floor((remaining % 3600000) / 60000);
+  const seconds = Math.floor((remaining % 60000) / 1000);
+
+  $("countDays").textContent = String(days).padStart(2, "0");
+  $("countHours").textContent = String(hours).padStart(2, "0");
+  $("countMinutes").textContent = String(minutes).padStart(2, "0");
+  $("countSeconds").textContent = String(seconds).padStart(2, "0");
+
+  message.textContent =
+    `${event.match_date} · ${event.match_time || "Time to be announced"} · ${event.venue || "Venue to be announced"}`;
+}
+function startTournamentCountdown() {
+  if (countdownInterval) clearInterval(countdownInterval);
+ updateTournamentCountdown();
+  countdownInterval = setInterval(updateTournamentCountdown, 1000);
+}
 if(configured)loadPublicData().catch(err=>console.error(err));
 else console.warn("Supabase is not configured. See SETUP.md.");
