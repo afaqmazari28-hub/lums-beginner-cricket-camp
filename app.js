@@ -92,8 +92,7 @@ async function uploadImage(file,bucket,folder){
   const ext=(file.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";
   const path=`${folder}/${crypto.randomUUID()}.${ext}`;
   const {error}=await db.storage.from(bucket).upload(path,file,{cacheControl:"3600",upsert:false,contentType:file.type});
-if (error) {
-  let responseText = "";
+if (error) throw error;
 
   try {
     responseText = await error.context.clone().text();
@@ -158,7 +157,20 @@ $("joinForm").addEventListener("submit", async e => {
       }
     );
 
-    if (error) throw error;
+    if (error) {
+  let details = "";
+
+  try {
+    if (error.context && typeof error.context.clone === "function") {
+      details = await error.context.clone().text();
+    }
+  } catch (e) {
+    console.error("Could not read Edge Function response:", e);
+  }
+
+  console.error("Registration server response:", details || error.message);
+  throw new Error(details || error.message);
+}
 
     if (!data?.success) {
       throw new Error(
