@@ -8,9 +8,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script defer src="app.js"></script>
+ <link rel="stylesheet" href="styles.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<script defer src="app.js"></script>
 </head>
 <body>
 <header class="site-header">
@@ -34,14 +38,34 @@
     <p class="hero-kicker" id="heroSubtitle">CRICKET TEAM</p>
     <p id="heroDescription" class="hero-description">Never played before? Perfect. Learn the game, build confidence and have fun together on the pitch.</p>
     <div class="hero-actions"><a class="button button-gold" href="#join">Join the squad</a><a class="button button-outline" href="#fixtures">Explore fixtures</a></div>
-    <div class="stats">
-      <div><strong id="memberCount">0</strong><span>Squad members</span></div>
-      <div><strong id="matchCount">0</strong><span>Fixtures listed</span></div>
-      <div><strong id="practiceCount">3</strong><span>Practices / week</span></div>
-      <div><strong>100%</strong><span>Beginner friendly</span></div>
-    </div>
+    
+<div class="stats">
+  <div><strong id="memberCount">0</strong><span>Squad members</span></div>
+  <div><strong id="matchCount">0</strong><span>Fixtures listed</span></div>
+  <div><strong id="practiceCount">3</strong><span>Practices / week</span></div>
+  <div><strong>100%</strong><span>Beginner friendly</span></div>
+</div>
+
+<!-- Live Tournament Countdown -->
+<div class="countdown-section">
+  <p class="countdown-label">NEXT BIG EVENT</p>
+  <h2 id="countdownTitle">Upcoming Tournament</h2>
+
+  <div id="tournamentCountdown" class="countdown-grid">
+    <div><strong id="countDays">--</strong><span>Days</span></div>
+    <div><strong id="countHours">--</strong><span>Hours</span></div>
+    <div><strong id="countMinutes">--</strong><span>Minutes</span></div>
+    <div><strong id="countSeconds">--</strong><span>Seconds</span></div>
   </div>
+
+  <p id="countdownMessage" class="countdown-message">
+    Loading next tournament...
+  </p>
+</div>
+
+</div>
 </section>
+
 
 <section id="about" class="section">
   <div class="container">
@@ -79,10 +103,23 @@
       <label>Playing role
         <select id="role" name="role" required><option value="Batsman">Batsman</option><option value="Bowler">Bowler</option><option value="All-rounder">All-rounder</option><option value="Wicketkeeper">Wicketkeeper</option><option value="Beginner / not sure">Beginner / not sure</option></select>
       </label>
-      <label>Profile picture <input id="memberPhoto" type="file" accept="image/png,image/jpeg,image/webp"></label>
-      <p class="small-note">Use a JPG, PNG or WebP image (maximum 5 MB). Please only upload a picture you have permission to share.</p>
-      <button class="button button-gold" type="submit">Submit registration</button>
-      <p id="joinMessage" class="form-message" role="status"></p>
+      
+<p class="small-note">
+  Use a JPG, PNG or WebP image (maximum 5 MB).
+  Please only upload a picture you have permission to share.
+</p>
+
+<div class="cf-turnstile"
+     data-sitekey="0x4AAAAAAF-JfD40CFhIl3pt"
+     data-theme="light">
+</div>
+
+<button class="button button-gold" type="submit">
+  Submit registration
+</button>
+
+<p id="joinMessage" class="form-message" role="status"></p>
+
     </form>
   </div>
 </section>
@@ -176,3 +213,5 @@
 </dialog>
 </body>
 </html>
+
+
